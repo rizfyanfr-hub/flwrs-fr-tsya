@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Bunga untuk Tasya</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Background video */
+    #videoBg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Konten */
+    .content {
+      text-align: center;
+      color: #fff;
+      position: relative;
+      top: 30%;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 42px;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    #pesan {
+      font-size: 22px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+      text-shadow: 2px 2px 6px #000;
+    }
+    .muncul {
+      opacity: 1 !important;
+      transform: translateY(0) scale(1) !important;
+    }
+
+    .bunga {
+      font-size: 50px;
+      margin-top: 20px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 1.5s ease;
+    }
+
+    /* confetti */
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .confetti span {
+      position: absolute;
+      font-size: 20px;
+      animation: jatuh 4s linear forwards;
+    }
+    @keyframes jatuh {
+      0% { transform: translateY(-10px) rotate(0); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video background -->
+  <video autoplay muted loop playsinline id="videoBg">
+    <source src="https://videos.pexels.com/video-files/856043/856043-hd_1920_1080_30fps.mp4" type="video/mp4">
+  </video>
+
+  <!-- Konten -->
+  <div class="content">
+    <h1>💐 Untuk Tasya 💐</h1>
+    <p id="pesan">Bunga ini hanya untukmu ❤</p>
+    <div class="bunga" id="emojiBunga">🌸 🌷 🌹 💐 🌻</div>
+  </div>
+
+  <!-- Confetti -->
+  <div class="confetti" id="confetti"></div>
+
+  <!-- Musik romantis -->
+  <audio id="musik" src="romantis.mp3" preload="auto" loop></audio>
+
+  <script>
+    // Jalankan animasi & musik
+    window.onload = () => {
+      let pesan = document.getElementById("pesan");
+      let bunga = document.getElementById("emojiBunga");
+      let musik = document.getElementById("musik");
+
+      // Animasi teks & bunga
+      setTimeout(() => { pesan.classList.add("muncul"); }, 800);
+      setTimeout(() => { bunga.classList.add("muncul"); }, 1600);
+
+      // confetti
+      startConfetti(8000);
+
+      // coba autoplay musik (Safari kadang blokir)
+      musik.play().catch(() => {
+        document.body.addEventListener("click", () => {
+          musik.play();
+        }, { once: true });
+      });
+    }
+
+    function startConfetti(durasi) {
+      let confetti = document.getElementById("confetti");
+      confetti.innerHTML = ""; 
+      let emoji = ["🎉","✨","💖","🌸","🌟","💐"];
+      let waktuAkhir = Date.now() + durasi;
+
+      let interval = setInterval(() => {
+        let span = document.createElement("span");
+        span.innerText = emoji[Math.floor(Math.random() * emoji.length)];
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.top = "-20px";
+        span.style.fontSize = (15 + Math.random() * 25) + "px";
+        span.style.animationDuration = (3 + Math.random() * 2) + "s";
+        confetti.appendChild(span);
+
+        setTimeout(() => { span.remove(); }, 4000);
+
+        if (Date.now() > waktuAkhir) {
+          clearInterval(interval);
+        }
+      }, 150);
+    }
+  </script>
+
+</body>
+</html>
